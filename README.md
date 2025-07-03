@@ -102,4 +102,4 @@ A full-stack web application for generating SEO content briefs and complete arti
 - The frontend uses Vite for fast development
 - The backend uses Flask with CORS enabled
 - API calls are proxied from frontend to backend during development
-- Hot reload is enabled for both frontend and backend 
+- Hot reload is enabled for both frontend and backend # Updated Thu Jul  3 16:06:47 CDT 2025
