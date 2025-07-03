@@ -12,9 +12,19 @@ sys.path.insert(0, os.path.dirname(__file__))
 
 from flask import Flask, send_from_directory
 from flask_cors import CORS
-from src.models.user import db
-from src.routes.user import user_bp
-from content_with_ai import content_bp
+
+# Import blueprints with error handling
+try:
+    from src.routes.user import user_bp
+except ImportError as e:
+    print(f"Warning: Could not import user_bp: {e}")
+    user_bp = None
+
+try:
+    from content_with_ai import content_bp
+except ImportError as e:
+    print(f"Error: Could not import content_bp: {e}")
+    content_bp = None
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
 app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
@@ -22,18 +32,19 @@ app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
 # Enable CORS for all routes
 CORS(app)
 
-app.register_blueprint(user_bp, url_prefix='/api')
-app.register_blueprint(content_bp, url_prefix='/api')
+# Register blueprints only if they exist
+if user_bp:
+    app.register_blueprint(user_bp, url_prefix='/api')
+if content_bp:
+    app.register_blueprint(content_bp, url_prefix='/api')
 
-# Database configuration - use in-memory SQLite for Vercel
-# In production, you might want to use a proper database like PostgreSQL
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(app)
+# Skip database initialization for Vercel to avoid issues
+# Database is not needed for the content generation functionality
 
-# Create database tables
-with app.app_context():
-    db.create_all()
+@app.route('/api/health', methods=['GET'])
+def health_check():
+    """Simple health check endpoint"""
+    return {'status': 'healthy', 'message': 'Server is running'}
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

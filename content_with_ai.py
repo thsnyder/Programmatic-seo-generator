@@ -84,6 +84,11 @@ def generate_article_title(keyword, product="Files.com"):
 def generate_meta_title(keyword, product="Files.com"):
     """Generate a meta title for SEO using OpenAI"""
     print(f"🤖 OpenAI API: Generating meta title for keyword: '{keyword}' for product: '{product}'")
+    
+    if not client:
+        print(f"🔄 Using template for keyword: '{keyword}' for {product}")
+        return f"{keyword} - Complete Guide, Tips & Best Practices"
+    
     try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -113,6 +118,11 @@ def generate_meta_title(keyword, product="Files.com"):
 def generate_meta_description(keyword, product="Files.com"):
     """Generate a meta description for SEO using OpenAI"""
     print(f"🤖 OpenAI API: Generating meta description for keyword: '{keyword}' for product: '{product}'")
+    
+    if not client:
+        print(f"🔄 Using template for keyword: '{keyword}' for {product}")
+        return f"Learn everything about {keyword} with our comprehensive guide. Discover best practices, expert tips, and proven strategies."
+    
     try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -139,6 +149,92 @@ def generate_meta_description(keyword, product="Files.com"):
 def generate_full_article(keyword, title, brief, product="Files.com"):
     """Generate a full article based on keyword, title, and brief using OpenAI"""
     print(f"🤖 OpenAI API: Generating full article for keyword: '{keyword}' with title: '{title}' for product: '{product}'")
+    
+    if not client:
+        print(f"🔄 Using template for keyword: '{keyword}' for {product}")
+        return f"""# {title}
+
+## Introduction
+
+{keyword} is a crucial topic that many people want to understand better, especially in the context of {product}'s expertise. In this comprehensive guide, we'll explore everything you need to know about {keyword}, from the basics to advanced strategies that can help you achieve your goals.
+
+## What is {keyword}?
+
+{keyword} refers to the practice and techniques involved in optimizing and implementing effective strategies. It encompasses various methodologies and approaches that help improve results, increase efficiency, and drive meaningful outcomes for individuals and organizations.
+
+## Key Benefits
+
+1. **Improved Performance**: Better results and enhanced effectiveness
+2. **Increased Efficiency**: Streamlined processes and optimized workflows  
+3. **Better User Experience**: Solutions that serve real needs and deliver value
+4. **Higher Success Rates**: More qualified outcomes and measurable improvements
+5. **Competitive Advantage**: Stay ahead of trends and industry developments
+
+## Best Practices for {keyword}
+
+### 1. Research and Planning
+Before diving into {keyword}, it's essential to conduct thorough research. This includes understanding your target audience, analyzing current market conditions, identifying opportunities, and setting clear, measurable objectives.
+
+### 2. Strategy Development
+Create a comprehensive strategy that addresses your specific needs and goals. Focus on developing actionable plans that can be implemented systematically and measured for effectiveness.
+
+### 3. Implementation Techniques
+Apply proven methodologies and techniques that have been tested in real-world scenarios. Consider factors such as scalability, sustainability, and long-term impact when choosing your approach.
+
+### 4. Monitoring and Optimization
+Continuously monitor your progress and make data-driven adjustments to improve results. Regular evaluation helps identify what's working well and what needs improvement.
+
+## Common Mistakes to Avoid
+
+- **Lack of Clear Strategy**: Jumping into implementation without proper planning
+- **Ignoring Data and Analytics**: Making decisions without supporting evidence
+- **Poor Resource Allocation**: Not dedicating sufficient time or resources
+- **Resistance to Change**: Failing to adapt when circumstances change
+- **Overlooking User Feedback**: Not incorporating valuable insights from stakeholders
+
+## Advanced Strategies
+
+### Leveraging Technology
+Modern {keyword} implementations benefit greatly from leveraging appropriate technology solutions. Consider automation tools, analytics platforms, and integration capabilities that can enhance your efforts.
+
+### Building Partnerships
+Collaborate with industry experts, complementary service providers, and strategic partners to expand your capabilities and reach. Strong partnerships can accelerate success and provide valuable insights.
+
+### Continuous Learning
+Stay updated with the latest trends, best practices, and emerging technologies in the {keyword} space. Attend conferences, participate in professional communities, and invest in ongoing education.
+
+## Measuring Success
+
+### Key Performance Indicators (KPIs)
+- Efficiency metrics and performance benchmarks
+- User satisfaction and engagement rates
+- Return on investment (ROI) calculations
+- Quality indicators and success metrics
+- Long-term sustainability measures
+
+### Tools and Analytics
+Utilize appropriate measurement tools to track progress and identify areas for improvement. Regular reporting and analysis help maintain focus on objectives and demonstrate value.
+
+## Future Trends and Considerations
+
+The landscape of {keyword} continues to evolve rapidly. Stay informed about emerging trends, technological advances, and changing best practices. Consider how these developments might impact your strategy and be prepared to adapt accordingly.
+
+## Conclusion
+
+Mastering {keyword} requires dedication, continuous learning, and adaptation to changing conditions. By following the strategies and best practices outlined in this guide, you'll be well-equipped to achieve success in your {keyword} endeavors.
+
+Remember to always prioritize value creation, maintain ethical practices, and focus on sustainable, long-term results. Success in {keyword} comes from consistent effort, strategic thinking, and a commitment to excellence.
+
+## Additional Resources
+
+- Industry publications and research reports
+- Professional associations and communities
+- Training programs and certification courses
+- Expert consultations and advisory services
+- Technology platforms and implementation tools
+
+Start implementing these strategies today and begin your journey toward {keyword} mastery. With the right approach and consistent effort, you can achieve remarkable results and establish yourself as a leader in this important field."""
+    
     try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
