@@ -222,19 +222,23 @@ function App() {
                     <TableHead className="w-[280px] text-files-headline-black font-semibold">Full Article</TableHead>
                     <TableHead className="w-[180px] text-files-headline-black font-semibold">Meta Title</TableHead>
                     <TableHead className="w-[220px] text-files-headline-black font-semibold">Meta Description</TableHead>
-                    <TableHead className="w-[100px] text-files-headline-black font-semibold">Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {rows.map((row) => (
                     <TableRow key={row.id} className="h-36 hover:bg-files-light-pink/20 transition-colors">
                       <TableCell className="p-4">
-                        <Input
-                          placeholder="Enter keyword..."
-                          value={row.keyword}
-                          onChange={(e) => updateKeyword(row.id, e.target.value)}
-                          className="w-full border-files-light-pink focus:border-files-primary-red focus:ring-files-primary-red/20 transition-all"
-                        />
+                        <div className="space-y-2">
+                          <Input
+                            placeholder="Enter keyword..."
+                            value={row.keyword}
+                            onChange={(e) => updateKeyword(row.id, e.target.value)}
+                            className="w-full border-files-light-pink focus:border-files-primary-red focus:ring-files-primary-red/20 transition-all"
+                          />
+                          <div className="flex justify-start mt-1">
+                            {getStatusBadge(row.status)}
+                          </div>
+                        </div>
                       </TableCell>
                       <TableCell className="p-4">
                         <Input
@@ -379,11 +383,6 @@ function App() {
                               </div>
                             )}
                           </div>
-                        </div>
-                      </TableCell>
-                      <TableCell className="p-4">
-                        <div className="flex justify-center">
-                          {getStatusBadge(row.status)}
                         </div>
                       </TableCell>
                     </TableRow>
