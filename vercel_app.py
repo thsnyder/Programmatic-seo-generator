@@ -2,8 +2,10 @@ import os
 import sys
 from dotenv import load_dotenv
 
-# Load environment variables from .env.local
-load_dotenv('.env.local')
+# Load environment variables from .env.local (for local development)
+# Vercel will use environment variables directly
+if os.path.exists('.env.local'):
+    load_dotenv('.env.local')
 
 # Add the current directory to Python path
 sys.path.insert(0, os.path.dirname(__file__))
@@ -23,8 +25,9 @@ CORS(app)
 app.register_blueprint(user_bp, url_prefix='/api')
 app.register_blueprint(content_bp, url_prefix='/api')
 
-# Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(os.path.dirname(__file__), 'database', 'app.db')}"
+# Database configuration - use in-memory SQLite for Vercel
+# In production, you might want to use a proper database like PostgreSQL
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
