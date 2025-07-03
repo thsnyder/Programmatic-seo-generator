@@ -6,11 +6,22 @@ import time
 content_bp = Blueprint('content', __name__)
 
 # Configure OpenAI
-client = OpenAI(api_key=os.getenv('OPENAI_SECRET_KEY'))
+api_key = os.getenv('OPENAI_SECRET_KEY') or os.getenv('OPENAI_API_KEY')
+if not api_key:
+    print("⚠️  Warning: OpenAI API key not found in environment variables")
+    print("🔄 Using template-based content generation as fallback")
+    client = None
+else:
+    client = OpenAI(api_key=api_key)
 
 def generate_content_brief(keyword, product="Files.com"):
     """Generate a content brief for the given keyword using OpenAI"""
     print(f"🤖 OpenAI API: Generating content brief for keyword: '{keyword}' for product: '{product}'")
+    
+    if not client:
+        print(f"🔄 Using template for keyword: '{keyword}' for {product}")
+        return f"Content brief for '{keyword}' for {product}: Create a comprehensive guide covering fundamentals, best practices, and actionable tips. Target audience: {product} users and potential customers. Include examples and case studies relevant to {product}'s market. Use a mix of paragraph text and bulleted lists for better readability."
+    
     try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
@@ -37,6 +48,11 @@ def generate_content_brief(keyword, product="Files.com"):
 def generate_article_title(keyword, product="Files.com"):
     """Generate an article title for the given keyword using OpenAI"""
     print(f"🤖 OpenAI API: Generating article title for keyword: '{keyword}' for product: '{product}'")
+    
+    if not client:
+        print(f"🔄 Using template for keyword: '{keyword}' for {product}")
+        return f"The Complete Guide to {keyword}: Everything You Need to Know"
+    
     try:
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
