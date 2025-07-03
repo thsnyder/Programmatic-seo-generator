@@ -1,6 +1,6 @@
 # SEO Content Generator
 
-A full-stack web application for generating SEO content briefs and complete articles from keywords.
+A full-stack web application for generating SEO content briefs and complete articles from keywords. Created by Tom for Files.com.
 
 ## Features
 
