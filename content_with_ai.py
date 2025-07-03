@@ -1,9 +1,8 @@
-from flask import Blueprint, request, jsonify
 from openai import OpenAI
 import os
 import time
 
-content_bp = Blueprint('content', __name__)
+# Content generation functions only - no Flask blueprint needed
 
 # Configure OpenAI
 api_key = os.getenv('OPENAI_SECRET_KEY') or os.getenv('OPENAI_API_KEY')
@@ -338,79 +337,4 @@ Remember to always prioritize value creation, maintain ethical practices, and fo
 - Expert consultations and advisory services
 - Technology platforms and implementation tools
 
-Start implementing these strategies today and begin your journey toward {keyword} mastery. With the right approach and consistent effort, you can achieve remarkable results and establish yourself as a leader in this important field."""
-
-@content_bp.route('/generate_brief_title', methods=['POST'])
-def generate_brief_title():
-    """Generate content brief and article title for a keyword"""
-    try:
-        data = request.get_json()
-        
-        if not data or 'keyword' not in data:
-            return jsonify({'error': 'Keyword is required'}), 400
-        
-        keyword = data['keyword'].strip()
-        product = data.get('product', 'Files.com').strip()
-        
-        if not keyword:
-            return jsonify({'error': 'Keyword cannot be empty'}), 400
-        
-        print(f"🚀 API Call: /generate_brief_title for keyword: '{keyword}' for product: '{product}'")
-        
-        # Generate content using OpenAI
-        content_brief = generate_content_brief(keyword, product)
-        article_title = generate_article_title(keyword, product)
-        
-        print(f"✅ API Response: Successfully generated brief and title for '{keyword}' for {product}")
-        
-        return jsonify({
-            'content_brief': content_brief,
-            'article_title': article_title
-        })
-        
-    except Exception as e:
-        print(f"❌ API Error: /generate_brief_title failed: {e}")
-        return jsonify({'error': str(e)}), 500
-
-@content_bp.route('/generate_article', methods=['POST'])
-def generate_article():
-    """Generate full article based on keyword, title, and brief"""
-    try:
-        data = request.get_json()
-        
-        required_fields = ['keyword', 'article_title', 'content_brief']
-        for field in required_fields:
-            if not data or field not in data:
-                return jsonify({'error': f'{field} is required'}), 400
-        
-        keyword = data['keyword'].strip()
-        article_title = data['article_title'].strip()
-        content_brief = data['content_brief'].strip()
-        product = data.get('product', 'Files.com').strip()
-        
-        if not all([keyword, article_title, content_brief]):
-            return jsonify({'error': 'All fields must be non-empty'}), 400
-        
-        print(f"🚀 API Call: /generate_article for keyword: '{keyword}' with title: '{article_title}' for product: '{product}'")
-        
-        # Generate content using OpenAI
-        full_article = generate_full_article(keyword, article_title, content_brief, product)
-        meta_title = generate_meta_title(keyword, product)
-        meta_description = generate_meta_description(keyword, product)
-        
-        print(f"✅ API Response: Successfully generated full article and meta data for '{keyword}' for {product}")
-        
-        return jsonify({
-            'full_article': full_article,
-            'meta_title': meta_title,
-            'meta_description': meta_description
-        })
-        
-    except Exception as e:
-        print(f"❌ API Error: /generate_article failed: {e}")
-        return jsonify({'error': str(e)}), 500
-
-@content_bp.route('/health', methods=['GET'])
-def health_check():
-    """Health check endpoint"""
-    return jsonify({'status': 'healthy', 'message': 'Content generation service is running'}) 
+Start implementing these strategies today and begin your journey toward {keyword} mastery. With the right approach and consistent effort, you can achieve remarkable results and establish yourself as a leader in this important field.""" 

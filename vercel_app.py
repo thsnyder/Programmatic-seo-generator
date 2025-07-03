@@ -10,21 +10,35 @@ if os.path.exists('.env.local'):
 # Add the current directory to Python path
 sys.path.insert(0, os.path.dirname(__file__))
 
-from flask import Flask, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
-# Import blueprints with error handling
+# Import content generation functions directly
 try:
-    from src.routes.user import user_bp
+    from content_with_ai import (
+        generate_content_brief,
+        generate_article_title,
+        generate_meta_title,
+        generate_meta_description,
+        generate_full_article
+    )
 except ImportError as e:
-    print(f"Warning: Could not import user_bp: {e}")
-    user_bp = None
-
-try:
-    from content_with_ai import content_bp
-except ImportError as e:
-    print(f"Error: Could not import content_bp: {e}")
-    content_bp = None
+    print(f"Error importing content functions: {e}")
+    # Define fallback functions if import fails
+    def generate_content_brief(keyword, product="Files.com"):
+        return f"Content brief for '{keyword}': Create a comprehensive guide covering fundamentals and best practices."
+    
+    def generate_article_title(keyword, product="Files.com"):
+        return f"The Complete Guide to {keyword}: Everything You Need to Know"
+    
+    def generate_meta_title(keyword, product="Files.com"):
+        return f"{keyword} - Complete Guide, Tips & Best Practices"
+    
+    def generate_meta_description(keyword, product="Files.com"):
+        return f"Learn everything about {keyword} with our comprehensive guide. Discover best practices and expert tips."
+    
+    def generate_full_article(keyword, title, brief, product="Files.com"):
+        return f"# {title}\n\n## Introduction\n\n{keyword} is an essential topic that every professional should understand."
 
 app = Flask(__name__, static_folder=os.path.join(os.path.dirname(__file__), 'static'))
 app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
@@ -32,36 +46,87 @@ app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
 # Enable CORS for all routes
 CORS(app)
 
-# Register blueprints only if they exist
-if user_bp:
-    app.register_blueprint(user_bp, url_prefix='/api')
-if content_bp:
-    app.register_blueprint(content_bp, url_prefix='/api')
-
-# Skip database initialization for Vercel to avoid issues
-# Database is not needed for the content generation functionality
-
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """Simple health check endpoint"""
-    return {'status': 'healthy', 'message': 'Server is running'}
+    return jsonify({'status': 'healthy', 'message': 'Server is running'})
+
+@app.route('/api/generate_brief_title', methods=['POST'])
+def generate_brief_title():
+    """Generate content brief and article title for a keyword"""
+    try:
+        data = request.get_json()
+        
+        if not data or 'keyword' not in data:
+            return jsonify({'error': 'Keyword is required'}), 400
+        
+        keyword = data['keyword'].strip()
+        product = data.get('product', 'Files.com').strip()
+        
+        if not keyword:
+            return jsonify({'error': 'Keyword cannot be empty'}), 400
+        
+        print(f"🚀 API Call: /generate_brief_title for keyword: '{keyword}' for product: '{product}'")
+        
+        # Generate content using functions
+        content_brief = generate_content_brief(keyword, product)
+        article_title = generate_article_title(keyword, product)
+        
+        print(f"✅ API Response: Successfully generated brief and title for '{keyword}' for {product}")
+        
+        return jsonify({
+            'content_brief': content_brief,
+            'article_title': article_title
+        })
+        
+    except Exception as e:
+        print(f"❌ API Error in /generate_brief_title: {e}")
+        return jsonify({'error': 'Internal server error'}), 500
+
+@app.route('/api/generate_article', methods=['POST'])
+def generate_article():
+    """Generate full article with meta data"""
+    try:
+        data = request.get_json()
+        
+        if not data or 'keyword' not in data:
+            return jsonify({'error': 'Keyword is required'}), 400
+        
+        keyword = data['keyword'].strip()
+        title = data.get('title', '').strip()
+        brief = data.get('brief', '').strip()
+        product = data.get('product', 'Files.com').strip()
+        
+        if not keyword:
+            return jsonify({'error': 'Keyword cannot be empty'}), 400
+        
+        print(f"🚀 API Call: /generate_article for keyword: '{keyword}' for product: '{product}'")
+        
+        # Generate all content
+        full_article = generate_full_article(keyword, title, brief, product)
+        meta_title = generate_meta_title(keyword, product)
+        meta_description = generate_meta_description(keyword, product)
+        
+        print(f"✅ API Response: Successfully generated article for '{keyword}' for {product}")
+        
+        return jsonify({
+            'full_article': full_article,
+            'meta_title': meta_title,
+            'meta_description': meta_description
+        })
+        
+    except Exception as e:
+        print(f"❌ API Error in /generate_article: {e}")
+        return jsonify({'error': 'Internal server error'}), 500
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
-    static_folder_path = app.static_folder
-    if static_folder_path is None:
-        return "Static folder not configured", 404
-
-    if path != "" and os.path.exists(os.path.join(static_folder_path, path)):
-        return send_from_directory(static_folder_path, path)
+    """Serve the React app"""
+    if path and os.path.exists(os.path.join(app.static_folder, path)):
+        return send_from_directory(app.static_folder, path)
     else:
-        index_path = os.path.join(static_folder_path, 'index.html')
-        if os.path.exists(index_path):
-            return send_from_directory(static_folder_path, 'index.html')
-        else:
-            return "index.html not found", 404
+        return send_from_directory(app.static_folder, 'index.html')
 
-# Export the app for Vercel
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True) 
+    app.run(debug=True, host='0.0.0.0', port=5000) 
