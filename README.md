@@ -30,7 +30,7 @@ A full-stack web application for generating SEO content briefs and complete arti
 2. **Set Environment Variables**
    Create a `.env.local` file:
    ```bash
-   OPENAI_API_KEY=your_openai_api_key_here
+   OPENAI_SECRET_KEY=your_openai_api_key_here
    ```
 
 3. **Start Development Servers**
@@ -61,7 +61,6 @@ A full-stack web application for generating SEO content briefs and complete arti
 
 2. **Set Environment Variables in Vercel**
    ```bash
-   vercel env add OPENAI_API_KEY
    vercel env add OPENAI_SECRET_KEY
    ```
 
@@ -76,8 +75,7 @@ A full-stack web application for generating SEO content briefs and complete arti
 
 | Variable | Description | Required |
 |----------|-------------|----------|
-| `OPENAI_API_KEY` | Your OpenAI API key | Yes |
-| `OPENAI_SECRET_KEY` | Alternative name for OpenAI API key | Yes |
+| `OPENAI_SECRET_KEY` | Your OpenAI API key | Yes |
 | `PRODUCT_NAME` | Custom product name (defaults to "Files.com") | No |
 
 ### Vercel Configuration
@@ -108,7 +106,7 @@ The project includes `vercel.json` with:
 │   ├── components/        # React components
 │   ├── App.jsx           # Main app component
 │   └── main.jsx          # React entry point
-├── vercel_app.py         # Flask backend server (Vercel deployment)
+├── api/index.py          # Flask backend server (Vercel deployment)
 ├── content_with_ai.py    # Content generation logic with OpenAI
 ├── requirements.txt      # Python dependencies
 ├── package.json          # Node.js dependencies

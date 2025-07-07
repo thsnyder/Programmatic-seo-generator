@@ -3,8 +3,7 @@
 ## Pre-Deployment Checklist
 
 ### ✅ Environment Variables
-- [ ] Set `OPENAI_API_KEY` in Vercel environment variables
-- [ ] Set `OPENAI_SECRET_KEY` in Vercel environment variables (same as OPENAI_API_KEY)
+- [ ] Set `OPENAI_SECRET_KEY` in Vercel environment variables
 - [ ] Optionally set `PRODUCT_NAME` if you want to customize the product name
 
 ### ✅ Code Review
@@ -29,7 +28,6 @@ npm i -g vercel
 vercel login
 
 # Set environment variables
-vercel env add OPENAI_API_KEY
 vercel env add OPENAI_SECRET_KEY
 
 # Deploy
