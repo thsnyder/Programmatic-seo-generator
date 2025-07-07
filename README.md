@@ -9,71 +9,89 @@ A full-stack web application for generating SEO content briefs and complete arti
 - **Article Title Generation**: Create compelling article titles
 - **Full Article Generation**: Generate complete articles based on briefs and titles
 - **Spreadsheet-style Interface**: Manage multiple content pieces in a table format
+- **AI-Powered**: Uses OpenAI GPT for intelligent content generation
 
 ## Tech Stack
 
 - **Frontend**: React + Vite + Tailwind CSS
-- **Backend**: Flask (Python)
-- **Database**: SQLite (optional)
+- **Backend**: Flask (Python) + OpenAI API
+- **Deployment**: Vercel (Full-stack)
 
-## Setup Instructions
+## Quick Start
 
-### Prerequisites
+### Local Development
 
-- Node.js (v16 or higher)
-- Python (v3.8 or higher)
-- pnpm (recommended) or npm
-
-### Installation
-
-1. **Install Frontend Dependencies**
+1. **Install Dependencies**
    ```bash
-   pnpm install
-   ```
-
-2. **Install Backend Dependencies**
-   ```bash
+   npm install
    pip install -r requirements.txt
    ```
 
-### Running the Application
-
-#### Option 1: Development Mode (Recommended)
-
-1. **Start the Backend Server**
+2. **Set Environment Variables**
+   Create a `.env.local` file:
    ```bash
-   python main.py
-   ```
-   The Flask server will run on `http://localhost:5000`
-
-2. **Start the Frontend Development Server**
-   ```bash
-   pnpm dev
-   ```
-   The React app will run on `http://localhost:5173`
-
-3. **Access the Application**
-   Open your browser and go to `http://localhost:5173`
-
-#### Option 2: Production Build
-
-1. **Build the Frontend**
-   ```bash
-   pnpm build
+   OPENAI_API_KEY=your_openai_api_key_here
    ```
 
-2. **Start the Backend Server**
+3. **Start Development Servers**
    ```bash
-   python main.py
+   # Terminal 1: Start backend
+   python3 vercel_app.py
+   
+   # Terminal 2: Start frontend
+   npm run dev
    ```
 
-3. **Access the Application**
-   Open your browser and go to `http://localhost:5000`
+4. **Access the Application**
+   - Frontend: `http://localhost:5173`
+   - Backend: `http://localhost:5000`
+
+## Deployment to Vercel
+
+### Prerequisites
+- Vercel account
+- OpenAI API key
+
+### Deployment Steps
+
+1. **Install Vercel CLI** (optional)
+   ```bash
+   npm i -g vercel
+   ```
+
+2. **Set Environment Variables in Vercel**
+   ```bash
+   vercel env add OPENAI_API_KEY
+   vercel env add OPENAI_SECRET_KEY
+   ```
+
+3. **Deploy**
+   ```bash
+   vercel --prod
+   ```
+
+   Or connect your GitHub repository to Vercel for automatic deployments.
+
+### Environment Variables Required
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `OPENAI_API_KEY` | Your OpenAI API key | Yes |
+| `OPENAI_SECRET_KEY` | Alternative name for OpenAI API key | Yes |
+| `PRODUCT_NAME` | Custom product name (defaults to "Files.com") | No |
+
+### Vercel Configuration
+
+The project includes `vercel.json` with:
+- Python Flask backend for API routes
+- Static build for React frontend
+- Proper routing configuration
+- 30-second function timeout for AI generation
 
 ## API Endpoints
 
 - `POST /api/generate_brief_title` - Generate content brief and article title
-- `POST /api/generate_article` - Generate full article
+- `POST /api/generate_article` - Generate full article with meta data
 - `GET /api/health` - Health check endpoint
 
 ## Usage
@@ -90,10 +108,11 @@ A full-stack web application for generating SEO content briefs and complete arti
 │   ├── components/        # React components
 │   ├── App.jsx           # Main app component
 │   └── main.jsx          # React entry point
-├── main.py               # Flask backend server
-├── content.py            # Content generation logic
+├── vercel_app.py         # Flask backend server (Vercel deployment)
+├── content_with_ai.py    # Content generation logic with OpenAI
 ├── requirements.txt      # Python dependencies
 ├── package.json          # Node.js dependencies
+├── vercel.json          # Vercel configuration
 └── vite.config.js        # Vite configuration
 ```
 
@@ -101,5 +120,25 @@ A full-stack web application for generating SEO content briefs and complete arti
 
 - The frontend uses Vite for fast development
 - The backend uses Flask with CORS enabled
-- API calls are proxied from frontend to backend during development
-- Hot reload is enabled for both frontend and backend # Updated Thu Jul  3 16:06:47 CDT 2025
+- API calls are made directly to the backend during development
+- Hot reload is enabled for both frontend and backend
+
+## Troubleshooting
+
+### Common Issues
+
+1. **OpenAI API Key Not Found**
+   - Ensure `OPENAI_API_KEY` is set in your environment variables
+   - The app will fall back to template-based content if no API key is provided
+
+2. **Build Errors**
+   - Make sure all dependencies are installed: `npm install && pip install -r requirements.txt`
+   - Check that Node.js version is 16+ and Python version is 3.8+
+
+3. **API Timeout**
+   - Vercel functions have a 30-second timeout
+   - For longer content generation, consider breaking into smaller chunks
+
+## License
+
+Created by Tom for Files.com
