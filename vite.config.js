@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import path from 'path'
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [react()],
   resolve: {
     alias: {
@@ -14,12 +14,12 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
   },
-  server: {
+  server: command === 'serve' ? {
     proxy: {
       '/api': {
         target: 'http://localhost:5000',
         changeOrigin: true,
       },
     },
-  },
-}) 
+  } : undefined,
+})) 
