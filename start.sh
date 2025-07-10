@@ -8,9 +8,9 @@ if ! command -v python3 &> /dev/null; then
     exit 1
 fi
 
-# Check if pnpm is installed
-if ! command -v pnpm &> /dev/null; then
-    echo "❌ pnpm is not installed. Please install pnpm or use npm instead."
+# Check if npm is installed
+if ! command -v npm &> /dev/null; then
+    echo "❌ npm is not installed. Please install npm."
     exit 1
 fi
 
@@ -23,12 +23,12 @@ fi
 # Install Node.js dependencies if package.json exists
 if [ -f "package.json" ]; then
     echo "📦 Installing Node.js dependencies..."
-    pnpm install
+    npm install
 fi
 
 # Start backend server in background
 echo "🔧 Starting Flask backend server on http://localhost:5000..."
-python main.py &
+python3 vercel_app.py &
 BACKEND_PID=$!
 
 # Wait a moment for backend to start
@@ -36,7 +36,7 @@ sleep 2
 
 # Start frontend development server
 echo "🎨 Starting React frontend server on http://localhost:5173..."
-pnpm dev &
+npm run dev &
 FRONTEND_PID=$!
 
 echo "✅ Both servers are starting up!"
