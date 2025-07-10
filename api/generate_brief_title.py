@@ -1,4 +1,20 @@
 import json
+import os
+import sys
+
+# Add the current directory to Python path to import content_with_ai
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+
+try:
+    from content_with_ai import generate_content_brief, generate_article_title
+except ImportError as e:
+    print(f"Error importing content functions: {e}")
+    # Fallback functions if import fails
+    def generate_content_brief(keyword, product="Files.com"):
+        return f"Content brief for '{keyword}' for {product}: Create a comprehensive guide covering fundamentals, best practices, and actionable tips. Target audience: {product} users and potential customers."
+    
+    def generate_article_title(keyword, product="Files.com"):
+        return f"The Complete Guide to {keyword}: Everything You Need to Know"
 
 def handler(request, context):
     if request.method == 'POST':
@@ -43,9 +59,13 @@ def handler(request, context):
                 'body': json.dumps({'error': 'Keyword cannot be empty'})
             }
         
-        # Simple inline content generation for testing
-        content_brief = f"Content brief for '{keyword}' for {product}: Create a comprehensive guide covering fundamentals, best practices, and actionable tips. Target audience: {product} users and potential customers."
-        article_title = f"The Complete Guide to {keyword}: Everything You Need to Know"
+        print(f"🚀 API Call: /generate_brief_title for keyword: '{keyword}' for product: '{product}'")
+        
+        # Use actual AI-powered content generation
+        content_brief = generate_content_brief(keyword, product)
+        article_title = generate_article_title(keyword, product)
+        
+        print(f"✅ API Response: Successfully generated brief and title for '{keyword}' for {product}")
         
         return {
             'statusCode': 200,
