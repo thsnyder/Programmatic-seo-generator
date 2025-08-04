@@ -14,12 +14,12 @@ export default defineConfig(({ command }) => ({
     outDir: 'dist',
     emptyOutDir: true,
   },
-  server: command === 'serve' ? {
+  server: {
     proxy: {
       '/api': {
         target: 'http://localhost:5000',
         changeOrigin: true,
       },
     },
-  } : undefined,
+  },
 })) 

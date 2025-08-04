@@ -145,8 +145,8 @@ def generate_meta_description(keyword, product="Files.com"):
         print(f"🔄 Falling back to template for keyword: '{keyword}' for {product}")
         return f"Learn everything about {keyword} with our comprehensive guide. Discover best practices, expert tips, and proven strategies."
 
-def generate_full_article(keyword, title, brief, product="Files.com"):
-    """Generate a full article based on keyword, title, and brief using OpenAI"""
+def generate_full_article(keyword, title, product="Files.com"):
+    """Generate a full article based on keyword and title using OpenAI"""
     print(f"🤖 OpenAI API: Generating full article for keyword: '{keyword}' with title: '{title}' for product: '{product}'")
     
     if not client:
@@ -244,7 +244,7 @@ Start implementing these strategies today and begin your journey toward {keyword
                 },
                 {
                     "role": "user",
-                    "content": f"Write a comprehensive article about '{keyword}' with the title '{title}' for {product}'s website. Use this content brief as guidance: {brief}\n\nWrite the article in markdown format with proper headings (H1, H2, H3). Use a balanced mix of paragraph text and bulleted lists throughout the article. Include practical tips, examples, and actionable advice that are relevant to {product}'s audience and expertise. Make it at least 1500 words with good readability. The content should reflect {product}'s brand voice and market position. Use bullet points for lists of features, benefits, steps, or tips, and use paragraphs for explanations and context."
+                    "content": f"Write a comprehensive article about '{keyword}' with the title '{title}' for {product}'s website. Write the article in markdown format with proper headings (H1, H2, H3). Use a balanced mix of paragraph text and bulleted lists throughout the article. Include practical tips, examples, and actionable advice that are relevant to {product}'s audience and expertise. Make it at least 1500 words with good readability. The content should reflect {product}'s brand voice and market position. Use bullet points for lists of features, benefits, steps, or tips, and use paragraphs for explanations and context."
                 }
             ],
             max_tokens=2000,

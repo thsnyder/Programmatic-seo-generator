@@ -83,9 +83,45 @@ def generate_brief_title():
         print(f"❌ API Error in /generate_brief_title: {e}")
         return jsonify({'error': 'Internal server error'}), 500
 
+@app.route('/api/generate_content', methods=['POST'])
+def generate_content():
+    """Generate all content in one step"""
+    try:
+        data = request.get_json()
+        
+        if not data or 'keyword' not in data:
+            return jsonify({'error': 'Keyword is required'}), 400
+        
+        keyword = data['keyword'].strip()
+        product = data.get('product', 'Files.com').strip()
+        
+        if not keyword:
+            return jsonify({'error': 'Keyword cannot be empty'}), 400
+        
+        print(f"🚀 API Call: /generate_content for keyword: '{keyword}' for product: '{product}'")
+        
+        # Generate all content in one step
+        article_title = generate_article_title(keyword, product)
+        full_article = generate_full_article(keyword, article_title, product)
+        meta_title = generate_meta_title(keyword, product)
+        meta_description = generate_meta_description(keyword, product)
+        
+        print(f"✅ API Response: Successfully generated all content for '{keyword}' for {product}")
+        
+        return jsonify({
+            'article_title': article_title,
+            'full_article': full_article,
+            'meta_title': meta_title,
+            'meta_description': meta_description
+        })
+        
+    except Exception as e:
+        print(f"❌ API Error in /generate_content: {e}")
+        return jsonify({'error': 'Internal server error'}), 500
+
 @app.route('/api/generate_article', methods=['POST'])
 def generate_article():
-    """Generate full article with meta data"""
+    """Generate full article with meta data (legacy endpoint)"""
     try:
         data = request.get_json()
         
