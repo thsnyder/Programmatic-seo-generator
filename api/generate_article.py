@@ -19,7 +19,11 @@ except ImportError as e:
     def generate_meta_description(keyword, product="Files.com"):
         return f"Learn everything about {keyword} with our comprehensive guide. Discover best practices and expert tips."
 
-def handler(request, context):
+def handler(request, response):
+    # Set CORS headers
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
     if request.method == 'POST':
         try:
             data = json.loads(request.body)

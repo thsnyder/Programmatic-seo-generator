@@ -16,31 +16,24 @@ except ImportError as e:
     def generate_article_title(keyword, product="Files.com"):
         return f"The Complete Guide to {keyword}: Everything You Need to Know"
 
-def handler(request, context):
+def handler(request, response):
+    # Set CORS headers
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
         except:
             return {
                 'statusCode': 400,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Content-Type'
-                },
                 'body': json.dumps({'error': 'Invalid JSON'})
             }
         
         if not data or 'keyword' not in data:
             return {
                 'statusCode': 400,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Content-Type'
-                },
                 'body': json.dumps({'error': 'Keyword is required'})
             }
         
@@ -50,12 +43,6 @@ def handler(request, context):
         if not keyword:
             return {
                 'statusCode': 400,
-                'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Content-Type'
-                },
                 'body': json.dumps({'error': 'Keyword cannot be empty'})
             }
         
@@ -69,12 +56,6 @@ def handler(request, context):
         
         return {
             'statusCode': 200,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type'
-            },
             'body': json.dumps({
                 'content_brief': content_brief,
                 'article_title': article_title
@@ -84,20 +65,11 @@ def handler(request, context):
     elif request.method == 'OPTIONS':
         return {
             'statusCode': 200,
-            'headers': {
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'POST, OPTIONS',
-                'Access-Control-Allow-Headers': 'Content-Type'
-            },
             'body': ''
         }
     
     else:
         return {
             'statusCode': 405,
-            'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
             'body': json.dumps({'error': 'Method not allowed'})
         } 
