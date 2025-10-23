@@ -7,55 +7,12 @@
       "config": {
         "distDir": "dist"
       }
-    },
-    {
-      "src": "api/health.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "api/generate_brief_title.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "api/generate_content.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "api/generate_article.py",
-      "use": "@vercel/python"
-    },
-    {
-      "src": "api/test.py",
-      "use": "@vercel/python"
     }
   ],
   "routes": [
     {
-      "src": "/api/health",
-      "dest": "/api/health"
-    },
-    {
-      "src": "/api/generate_brief_title",
-      "dest": "/api/generate_brief_title"
-    },
-    {
-      "src": "/api/generate_content",
-      "dest": "/api/generate_content"
-    },
-    {
-      "src": "/api/generate_article",
-      "dest": "/api/generate_article"
-    },
-    {
-      "src": "/api/test",
-      "dest": "/api/test"
-    },
-    {
       "src": "/(.*)",
       "dest": "/dist/$1"
     }
-  ],
-  "env": {
-    "PYTHONPATH": "."
-  }
+  ]
 } 
