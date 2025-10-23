@@ -7,5 +7,5 @@ def handler(request, context):
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*'
         },
-        'body': json.dumps({'message': 'Python function is working!'})
-    } 
+        'body': json.dumps({'message': 'API is working!', 'method': request.method})
+    }
