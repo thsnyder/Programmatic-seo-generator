@@ -94,15 +94,16 @@ def generate_content():
         
         keyword = data['keyword'].strip()
         product = data.get('product', 'Files.com').strip()
+        content_length = data.get('contentLength', 'medium').strip()
         
         if not keyword:
             return jsonify({'error': 'Keyword cannot be empty'}), 400
         
-        print(f"🚀 API Call: /generate_content for keyword: '{keyword}' for product: '{product}'")
+        print(f"🚀 API Call: /generate_content for keyword: '{keyword}' for product: '{product}' with length: '{content_length}'")
         
         # Generate all content in one step
         article_title = generate_article_title(keyword, product)
-        full_article = generate_full_article(keyword, article_title, product)
+        full_article = generate_full_article(keyword, article_title, product, content_length)
         meta_title = generate_meta_title(keyword, product)
         meta_description = generate_meta_description(keyword, product)
         
